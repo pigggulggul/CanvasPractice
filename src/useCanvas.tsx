@@ -1,6 +1,10 @@
 import { useEffect, useRef } from "react";
 
-export default function useCanvas(canvasWidth: number, canvasHeight: number) {
+export default function useCanvas(
+  canvasWidth: number,
+  canvasHeight: number,
+  animate: (ctx: CanvasRenderingContext2D) => void
+) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -14,12 +18,24 @@ export default function useCanvas(canvasWidth: number, canvasHeight: number) {
 
         canvas.width = canvasWidth * devicePixelRatio;
         canvas.height = canvasHeight * devicePixelRatio;
+        ctx.scale(devicePixelRatio, devicePixelRatio);
       }
     };
     setCanvas();
 
-    // console.log(canvasWidth);
-    // console.log(canvasHeight);
+    let requestId: number;
+    const requestAnimation = () => {
+      requestId = window.requestAnimationFrame(requestAnimation);
+
+      if (ctx) {
+        animate(ctx);
+      }
+    };
+    requestAnimation();
+
+    return () => {
+      window.cancelAnimationFrame(requestId);
+    };
   }, [canvasWidth, canvasHeight]);
   return canvasRef;
 }
