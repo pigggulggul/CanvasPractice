@@ -3,13 +3,36 @@ import "./App.css";
 import CanvasItem from "./CanvasItem";
 import useClientWidthHeight from "./script/useClientWidthHeight";
 import html2canvas from "html2canvas";
-import { position } from "html2canvas/dist/types/css/property-descriptors/position";
-import { display } from "html2canvas/dist/types/css/property-descriptors/display";
+
+type templateType = {
+  thumb: string;
+  name: string;
+  thumbType: string;
+};
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [previewImages, setPreviewImages] = useState<string>();
-
+  const [currentTemplate, setcurrentTemplate] = useState<string>("");
+  const template: templateType[] = [
+    { thumb: "typeA", name: "타입A", thumbType: "jpg" },
+    { thumb: "typeB", name: "타입B", thumbType: "jpg" },
+  ];
+  const templateList = template.map((item, index) => {
+    const imgSrc = "/src/images/thumbnail/" + item.thumb + "." + item.thumbType;
+    return (
+      <li
+        className=" p-4 m-4 flex flex-col items-center cursor-pointer hover:bg-slate-100 "
+        key={item.thumb}
+        onClick={() => {
+          changeTemplate(item.thumb);
+        }}
+      >
+        <img className="relative w-36 h-36" src={imgSrc} alt="" />
+        <p>{item.name}</p>
+      </li>
+    );
+  });
   const clientRect = useClientWidthHeight(canvasRef);
   const canvasWidth = clientRect.width;
   const canvasHeight = clientRect.height;
@@ -67,7 +90,7 @@ function App() {
         ref={canvasRef}
         style={{ width: "100%", height: "100vh", position: "relative" }}
       >
-        <h1 style={{ position: "absolute", top: "10%" }}>헤헤헤헤</h1>
+        <h1>현재 선택한 template : {currentTemplate}</h1>
         <CanvasItem
           canvasWidth={canvasWidth}
           canvasHeight={canvasHeight}
@@ -77,6 +100,11 @@ function App() {
           <img src={previewImages} />
         </div>
       </main>
+      {/* template */}
+      <section className="template">
+        <ul className="flex border border-red-100">{templateList}</ul>
+      </section>
+
       <button onClick={onHtmlToPng}>다운로드</button>
       <div className="mypage-img-wrap">
         <label className="input-file-button" htmlFor="upfile">
@@ -92,6 +120,10 @@ function App() {
       </div>
     </>
   );
+
+  function changeTemplate(type: string) {
+    setcurrentTemplate(type);
+  }
 }
 
 export default App;
