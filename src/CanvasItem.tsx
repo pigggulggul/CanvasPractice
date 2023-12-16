@@ -6,10 +6,12 @@ import useCanvas from "./useCanvas";
 type canvasType = {
   canvasWidth: number;
   canvasHeight: number;
+  onChangeType: string;
 };
 export default function CanvasItem(props: canvasType) {
   const canvasWidth = props.canvasWidth;
   const canvasHeight = props.canvasHeight;
+  const changeType = props.onChangeType;
   const [getCtx, setGetCtx] = useState<CanvasRenderingContext2D>();
   // painting state
   const [painting, setPainting] = useState(false);
@@ -31,6 +33,15 @@ export default function CanvasItem(props: canvasType) {
       }
     }
   }, []);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+  }, [changeType]);
   const drawFn = (e: any) => {
     // mouse position
     const mouseX = e.nativeEvent.offsetX;

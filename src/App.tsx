@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import CanvasItem from "./CanvasItem";
 import useClientWidthHeight from "./script/useClientWidthHeight";
@@ -33,6 +33,7 @@ function App() {
       </li>
     );
   });
+
   const clientRect = useClientWidthHeight(canvasRef);
   const canvasWidth = clientRect.width;
   const canvasHeight = clientRect.height;
@@ -84,45 +85,64 @@ function App() {
     //   this.imageUploaded = URL.createObjectURL(this.image)
   };
   return (
-    <>
-      <main
-        id="capture"
-        ref={canvasRef}
-        style={{ width: "100%", height: "100vh", position: "relative" }}
+    <div className="flex flex-col justify-center items-center">
+      <section
+        className="main flex justify-center items-center w-3/4"
+        style={{ height: "800px" }}
       >
-        <h1>현재 선택한 template : {currentTemplate}</h1>
-        <CanvasItem
-          canvasWidth={canvasWidth}
-          canvasHeight={canvasHeight}
-        ></CanvasItem>
+        <main id="capture" className="w-3/4 h-full relative" ref={canvasRef}>
+          <CanvasItem
+            canvasWidth={canvasWidth}
+            canvasHeight={canvasHeight}
+            onChangeType={currentTemplate}
+          ></CanvasItem>
 
-        <div style={{ width: "400px", position: "absolute", top: "10%" }}>
-          <img src={previewImages} />
+          <div className="absolute w-3/4 mb-4 bottom-0 border left-1/2 -translate-x-1/2">
+            <div className="w-full flex h-64 bg-slate-100">
+              <div className="w-3/4 flex flex-col justify-between border p-2">
+                <p className="frame-text-1">
+                  I confess, I haven't tried too hard to concentrate, not when I
+                  know you are but a daydreamaway.
+                </p>
+                <span className="text-right">icon</span>
+              </div>
+              <div className="w-1/4 flex flex-col justify-center items-center border p-2">
+                <img className="w-5/6 h-5/6" src={previewImages} />
+                <p className="frame-text-2 h-1/6 flex justify-center items-center">
+                  Eliet
+                </p>
+              </div>
+            </div>
+          </div>
+        </main>
+        <div className="detail w-1/4 h-full border">
+          <div className="mypage-img-wrap">
+            <label className="input-file-button" htmlFor="upfile">
+              <span className=""> 사진등록 </span>
+            </label>
+            <input
+              type="file"
+              id="upfile"
+              accept="image/*, .gif"
+              onChange={upload}
+              style={{ display: "none" }}
+            />
+          </div>
         </div>
-      </main>
+      </section>
+
       {/* template */}
-      <section className="template">
+      <section className="template w-3/4">
         <ul className="flex border border-red-100">{templateList}</ul>
       </section>
 
       <button onClick={onHtmlToPng}>다운로드</button>
-      <div className="mypage-img-wrap">
-        <label className="input-file-button" htmlFor="upfile">
-          <span className=""> 사진등록 </span>
-        </label>
-        <input
-          type="file"
-          id="upfile"
-          accept="image/*, .gif"
-          onChange={upload}
-          style={{ display: "none" }}
-        />
-      </div>
-    </>
+    </div>
   );
 
   function changeTemplate(type: string) {
     setcurrentTemplate(type);
+    setPreviewImages("");
   }
 }
 
