@@ -7,11 +7,13 @@ type canvasType = {
   canvasWidth: number;
   canvasHeight: number;
   onChangeType: string;
+  eraser: boolean;
 };
 export default function CanvasItem(props: canvasType) {
   const canvasWidth = props.canvasWidth;
   const canvasHeight = props.canvasHeight;
   const changeType = props.onChangeType;
+  const eraser = props.eraser;
   const [getCtx, setGetCtx] = useState<CanvasRenderingContext2D>();
   // painting state
   const [painting, setPainting] = useState(false);
@@ -42,6 +44,15 @@ export default function CanvasItem(props: canvasType) {
       }
     }
   }, [changeType]);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+  }, [eraser]);
   const drawFn = (e: any) => {
     // mouse position
     const mouseX = e.nativeEvent.offsetX;

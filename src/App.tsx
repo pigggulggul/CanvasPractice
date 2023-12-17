@@ -36,8 +36,21 @@ function App() {
   });
 
   const clientRect = useClientWidthHeight(canvasRef);
-  const canvasWidth = clientRect.width;
-  const canvasHeight = clientRect.height;
+  let canvasWidth: number;
+  let canvasHeight: number;
+  // if (clientRect.width > 1535) {
+  //   canvasWidth = 1536;
+  // } else if (clientRect.width > 1279) {
+  //   canvasWidth = 1280;
+  // } else if (clientRect.width > 1023) {
+  //   canvasWidth = 1024;
+  // } else if (clientRect.width > 767) {
+  //   canvasWidth = 768;
+  // } else {
+  //   canvasWidth = 640;
+  // }
+  canvasWidth = 1400;
+  canvasHeight = 1050;
   const onHtmlToPng = () => {
     const target = canvasRef.current;
     const onCapture = () => {
@@ -61,15 +74,41 @@ function App() {
     };
     onCapture();
   };
+  function selectType() {
+    switch (currentTemplate) {
+      case "typeA": {
+        console.log("typeA");
+        return (
+          <TypeA
+            canvasRef={canvasRef}
+            canvasWidth={canvasWidth}
+            canvasHeight={canvasHeight}
+            template={currentTemplate}
+          ></TypeA>
+        );
+        break;
+      }
+      case "typeB": {
+        console.log("typeB");
+        return (
+          <TypeA
+            canvasRef={canvasRef}
+            canvasWidth={canvasWidth}
+            canvasHeight={canvasHeight}
+            template={currentTemplate}
+          ></TypeA>
+        );
+      }
+
+      default:
+        return <div></div>;
+        break;
+    }
+  }
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <TypeA
-        canvasRef={canvasRef}
-        canvasWidth={canvasWidth}
-        canvasHeight={canvasHeight}
-        template={currentTemplate}
-      ></TypeA>
+      {selectType()}
       {/* template */}
       <section className="template w-3/4">
         <ul className="flex border border-red-100">{templateList}</ul>

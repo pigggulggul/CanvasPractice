@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { BaseSyntheticEvent, useRef, useState } from "react";
 import CanvasItem from "../CanvasItem";
 
 export default function TypeA(props: {
@@ -8,76 +8,127 @@ export default function TypeA(props: {
   template: string;
 }) {
   const { canvasRef, canvasWidth, canvasHeight, template } = props;
-  const [previewImages, setPreviewImages] = useState<string>();
+  const [characterImage, setCharacterImage] = useState<string>();
+  const [backgroundImage, setBackgroundImage] = useState<string>();
   const [currentTemplate, setcurrentTemplate] = useState<string>(template);
-  const upload = (event: any) => {
-    console.log("upload 호출");
-    console.log(event.target.files.length);
-    setPreviewImages("");
+  const [line, setLine] = useState<string>("대사를 입력해주세요");
+  const [character, setCharacter] = useState<string>("이름");
+  const [eraserFlag, setEraserFlag] = useState<boolean>(false);
+  console.log(canvasHeight);
+  console.log(canvasWidth);
+
+  const uploadCharacter = (event: any) => {
+    setCharacterImage("");
     if (event.target.files.length > 1) {
       alert("사진은 최대 1개 까지 첨부가능합니다.");
     } else {
-      //file째로(DTO-X 뷰에 찍히는 정보대로) 저장
-      // files.value.fileInfos = event.target.files;
       for (const file of event.target.files) {
-        //프리뷰
         const reader = new FileReader();
         reader.onload = (e: any) => {
-          setPreviewImages(e.target.result);
-          console.log(previewImages);
+          setCharacterImage(e.target.result);
         };
         reader.readAsDataURL(file);
       }
     }
-    // 사용자가 올린 이미지
-    console.log(event.target.files);
-    // URL.createObjectURL로 사용자가 올린 이미지를 URL로 만들어서 화면에 표시할 수 있게 한다. img 태그의 src값에 바인딩해준다
-    //   this.imageUploaded = URL.createObjectURL(this.image)
   };
-
+  const uploadBackground = (event: any) => {
+    setBackgroundImage("");
+    if (event.target.files.length > 1) {
+      alert("사진은 최대 1개 까지 첨부가능합니다.");
+    } else {
+      for (const file of event.target.files) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          setBackgroundImage(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
+  const changeCharacter = (event: BaseSyntheticEvent) => {
+    setCharacter(event.target.value);
+  };
+  const changeLine = (event: BaseSyntheticEvent) => {
+    setLine(event.target.value);
+  };
+  const eraserButton = () => {
+    setEraserFlag(!eraserFlag);
+  };
   return (
-    <section
-      className="main flex justify-center items-center w-3/4"
-      style={{ height: "800px" }}
-    >
-      <main id="capture" className="w-3/4 h-full relative" ref={canvasRef}>
+    <section className="main flex flex-col justify-center items-center">
+      <main
+        id="capture"
+        className="relative"
+        ref={canvasRef}
+        style={{ height: "1050px", width: "1400px" }}
+      >
         <CanvasItem
           canvasWidth={canvasWidth}
           canvasHeight={canvasHeight}
           onChangeType={currentTemplate}
+          eraser={eraserFlag}
         ></CanvasItem>
 
         <div className="absolute w-3/4 mb-4 bottom-0 border left-1/2 -translate-x-1/2">
           <div className="w-full flex h-64 bg-slate-100">
             <div className="w-3/4 flex flex-col justify-between border p-2">
-              <p className="frame-text-1">
-                I confess, I haven't tried too hard to concentrate, not when I
-                know you are but a daydreamaway.
-              </p>
+              <p className="frame-text-1">{line}</p>
               <span className="text-right">icon</span>
             </div>
             <div className="w-1/4 flex flex-col justify-center items-center border p-2">
-              <img className="w-5/6 h-5/6" src={previewImages} />
+              <img className="w-5/6 h-5/6" src={characterImage} />
               <p className="frame-text-2 h-1/6 flex justify-center items-center">
-                Eliet
+                {character}
               </p>
             </div>
           </div>
         </div>
+        <div className="absolute top-0 w-full h-full -z-10">
+          <img className="w-full h-full" src={backgroundImage} />
+        </div>
       </main>
-      <div className="detail w-1/4 h-full border">
-        <div className="mypage-img-wrap">
-          <label className="input-file-button" htmlFor="upfile">
-            <span className=""> 사진등록 </span>
+      <div className="detail w-full h-full border">
+        <div className="character-image-upload">
+          <label className="input-file-button" htmlFor="characterfile">
+            <span className="border"> 인물사진 등록 </span>
           </label>
           <input
             type="file"
-            id="upfile"
+            id="characterfile"
             accept="image/*, .gif"
-            onChange={upload}
+            onChange={uploadCharacter}
             style={{ display: "none" }}
           />
         </div>
+        <div className="background-image-upload">
+          <label className="input-file-button" htmlFor="backgroundfile">
+            <span className="border"> 배경 등록 </span>
+          </label>
+          <input
+            type="file"
+            id="backgroundfile"
+            accept="image/*, .gif"
+            onChange={uploadBackground}
+            style={{ display: "none" }}
+          />
+        </div>
+        <div>
+          <p>대사 : </p>
+          <input
+            type="text"
+            className="border"
+            value={line}
+            onChange={changeLine}
+          />
+          <p>캐릭터이름 : </p>
+          <input
+            type="text"
+            className="border"
+            value={character}
+            onChange={changeCharacter}
+          />
+        </div>
+        <button onClick={eraserButton}>지우기</button>
       </div>
     </section>
   );

@@ -11,7 +11,8 @@ export default function useCanvas(
     const ctx = canvas?.getContext("2d");
 
     const setCanvas = () => {
-      const devicePixelRatio = window.devicePixelRatio ?? 1;
+      // const devicePixelRatio = window.devicePixelRatio ?? 1;
+      const devicePixelRatio = 1;
       if (canvas && ctx) {
         canvas.style.width = canvasWidth + "px";
         canvas.style.height = canvasHeight + "px";
