@@ -14,8 +14,11 @@ export default function TypeA(props: {
   const [line, setLine] = useState<string>("대사를 입력해주세요");
   const [character, setCharacter] = useState<string>("이름");
   const [eraserFlag, setEraserFlag] = useState<boolean>(false);
-  console.log(canvasHeight);
-  console.log(canvasWidth);
+  const [characterResize, setCharacterResize] = useState<ImageResize>({
+    zoom: 1.0,
+    updown: 0,
+    leftright: 0,
+  });
 
   const uploadCharacter = (event: any) => {
     setCharacterImage("");
@@ -48,6 +51,27 @@ export default function TypeA(props: {
   const changeCharacter = (event: BaseSyntheticEvent) => {
     setCharacter(event.target.value);
   };
+  const resizeZoomCharacter = (event: BaseSyntheticEvent) => {
+    let num: number = parseFloat(event.target.value);
+    setCharacterResize((prev) => ({
+      ...prev,
+      zoom: num,
+    }));
+  };
+  const resizeUpdownCharacter = (event: BaseSyntheticEvent) => {
+    let num: number = parseInt(event.target.value);
+    setCharacterResize((prev) => ({
+      ...prev,
+      updown: num,
+    }));
+  };
+  const resizeLeftrightCharacter = (event: BaseSyntheticEvent) => {
+    let num: number = parseInt(event.target.value);
+    setCharacterResize((prev) => ({
+      ...prev,
+      leftright: num,
+    }));
+  };
   const changeLine = (event: BaseSyntheticEvent) => {
     setLine(event.target.value);
   };
@@ -76,7 +100,18 @@ export default function TypeA(props: {
               <span className="text-right">icon</span>
             </div>
             <div className="w-1/4 flex flex-col justify-center items-center border p-2">
-              <img className="w-5/6 h-5/6" src={characterImage} />
+              <div className="w-5/6 h-5/6 relative overflow-hidden">
+                <img
+                  className="w-full h-full object-cover absolute"
+                  src={characterImage}
+                  style={{
+                    transform: `scale(${characterResize.zoom})`,
+                    top: `${characterResize.updown}px`,
+                    left: `${characterResize.leftright}px`,
+                  }}
+                />
+              </div>
+
               <p className="frame-text-2 h-1/6 flex justify-center items-center">
                 {character}
               </p>
@@ -99,6 +134,40 @@ export default function TypeA(props: {
             onChange={uploadCharacter}
             style={{ display: "none" }}
           />
+          <p>인물 크기 조정</p>
+
+          <ul>
+            <li>
+              <p>확대,축소 (0~3)</p>
+              <input
+                type="number"
+                step={0.1}
+                className="border"
+                value={characterResize.zoom}
+                onChange={resizeZoomCharacter}
+              />
+            </li>
+            <li>
+              <p>상,하 (+,-)</p>
+              <input
+                type="number"
+                step={5}
+                className="border"
+                value={characterResize.updown}
+                onChange={resizeUpdownCharacter}
+              />
+            </li>
+            <li>
+              <p>좌,우 (+,-)</p>
+              <input
+                type="number"
+                step={5}
+                className="border"
+                value={characterResize.leftright}
+                onChange={resizeLeftrightCharacter}
+              />
+            </li>
+          </ul>
         </div>
         <div className="background-image-upload">
           <label className="input-file-button" htmlFor="backgroundfile">
