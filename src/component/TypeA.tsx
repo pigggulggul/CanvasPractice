@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useRef, useState } from "react";
+import { BaseSyntheticEvent, useState } from "react";
 import CanvasItem from "../CanvasItem";
 
 export default function TypeA(props: {
@@ -15,6 +15,11 @@ export default function TypeA(props: {
   const [character, setCharacter] = useState<string>("이름");
   const [eraserFlag, setEraserFlag] = useState<boolean>(false);
   const [characterResize, setCharacterResize] = useState<ImageResize>({
+    zoom: 1.0,
+    updown: 0,
+    leftright: 0,
+  });
+  const [bgResize, setBgResize] = useState<ImageResize>({
     zoom: 1.0,
     updown: 0,
     leftright: 0,
@@ -52,22 +57,43 @@ export default function TypeA(props: {
     setCharacter(event.target.value);
   };
   const resizeZoomCharacter = (event: BaseSyntheticEvent) => {
-    let num: number = parseFloat(event.target.value);
+    const num: number = parseFloat(event.target.value);
     setCharacterResize((prev) => ({
       ...prev,
       zoom: num,
     }));
   };
   const resizeUpdownCharacter = (event: BaseSyntheticEvent) => {
-    let num: number = parseInt(event.target.value);
+    const num: number = parseInt(event.target.value);
     setCharacterResize((prev) => ({
       ...prev,
       updown: num,
     }));
   };
   const resizeLeftrightCharacter = (event: BaseSyntheticEvent) => {
-    let num: number = parseInt(event.target.value);
+    const num: number = parseInt(event.target.value);
     setCharacterResize((prev) => ({
+      ...prev,
+      leftright: num,
+    }));
+  };
+  const resizeZoomBg = (event: BaseSyntheticEvent) => {
+    const num: number = parseFloat(event.target.value);
+    setBgResize((prev) => ({
+      ...prev,
+      zoom: num,
+    }));
+  };
+  const resizeUpdownBg = (event: BaseSyntheticEvent) => {
+    const num: number = parseInt(event.target.value);
+    setBgResize((prev) => ({
+      ...prev,
+      updown: num,
+    }));
+  };
+  const resizeLeftrightBg = (event: BaseSyntheticEvent) => {
+    const num: number = parseInt(event.target.value);
+    setBgResize((prev) => ({
       ...prev,
       leftright: num,
     }));
@@ -93,33 +119,50 @@ export default function TypeA(props: {
           eraser={eraserFlag}
         ></CanvasItem>
 
-        <div className="absolute w-3/4 mb-4 bottom-0 border left-1/2 -translate-x-1/2">
-          <div className="w-full flex h-64 bg-slate-100">
-            <div className="w-3/4 flex flex-col justify-between border p-2">
-              <p className="frame-text-1">{line}</p>
-              <span className="text-right">icon</span>
+        <div className="absolute w-3/4 mb-4 bottom-0 border left-1/2 -translate-x-1/2 border-amber-600 border-8">
+          <div className="w-full flex h-64">
+            <div className="w-3/4 flex flex-col justify-between border border-amber-800 p-2 bg-orange-300">
+              {/* 대사 */}
+              <p className="frame-text text-2xl text-orange-900">{line}</p>
+              <span className="text-right material-symbols-outlined text-3xl text-orange-900">
+                arrow_drop_down
+              </span>
             </div>
-            <div className="w-1/4 flex flex-col justify-center items-center border p-2">
+            <div className="w-1/4 flex flex-col justify-center items-center border  border-amber-800 p-2 bg-orange-300">
+              {/* 캐릭터 이미지 */}
               <div className="w-5/6 h-5/6 relative overflow-hidden">
-                <img
-                  className="w-full h-full object-cover absolute"
-                  src={characterImage}
+                <div
+                  className="w-full h-full absolute"
                   style={{
+                    backgroundImage: `url(${characterImage})`,
+                    backgroundPositionX: `${characterResize.leftright}px`,
+                    backgroundPositionY: `${characterResize.updown}px`,
+                    backgroundRepeat: "no-repeat",
                     transform: `scale(${characterResize.zoom})`,
-                    top: `${characterResize.updown}px`,
-                    left: `${characterResize.leftright}px`,
                   }}
-                />
+                ></div>
               </div>
-
-              <p className="frame-text-2 h-1/6 flex justify-center items-center">
+              {/* 캐릭터 이름 */}
+              <p className="frame-text-2 frame-text text-2xl text-orange-900 h-1/6 flex justify-center items-center">
                 {character}
               </p>
             </div>
           </div>
         </div>
         <div className="absolute top-0 w-full h-full -z-10">
-          <img className="w-full h-full" src={backgroundImage} />
+          {/* 캐릭터 이미지 */}
+          <div className="w-full h-full relative overflow-hidden">
+            <div
+              className="w-full h-full absolute"
+              style={{
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundPositionX: `${bgResize.leftright}px`,
+                backgroundPositionY: `${bgResize.updown}px`,
+                backgroundRepeat: "no-repeat",
+                transform: `scale(${bgResize.zoom})`,
+              }}
+            ></div>
+          </div>
         </div>
       </main>
       <div className="detail w-full h-full border">
@@ -135,7 +178,6 @@ export default function TypeA(props: {
             style={{ display: "none" }}
           />
           <p>인물 크기 조정</p>
-
           <ul>
             <li>
               <p>확대,축소 (0~3)</p>
@@ -180,6 +222,39 @@ export default function TypeA(props: {
             onChange={uploadBackground}
             style={{ display: "none" }}
           />
+          <p>배경 크기 조정</p>
+          <ul>
+            <li>
+              <p>확대,축소 (0~3)</p>
+              <input
+                type="number"
+                step={0.1}
+                className="border"
+                value={bgResize.zoom}
+                onChange={resizeZoomBg}
+              />
+            </li>
+            <li>
+              <p>상,하 (+,-)</p>
+              <input
+                type="number"
+                step={5}
+                className="border"
+                value={bgResize.updown}
+                onChange={resizeUpdownBg}
+              />
+            </li>
+            <li>
+              <p>좌,우 (+,-)</p>
+              <input
+                type="number"
+                step={5}
+                className="border"
+                value={bgResize.leftright}
+                onChange={resizeLeftrightBg}
+              />
+            </li>
+          </ul>
         </div>
         <div>
           <p>대사 : </p>

@@ -64,7 +64,6 @@ function App() {
     };
 
     const onSaveAs = (uri: string, filename: string) => {
-      console.log("onSaveAs");
       let link = document.createElement("a");
       document.body.appendChild(link);
       link.href = uri;
