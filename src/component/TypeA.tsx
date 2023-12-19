@@ -105,7 +105,7 @@ export default function TypeA(props: {
     setEraserFlag(!eraserFlag);
   };
   return (
-    <section className="main flex flex-col justify-center items-center">
+    <section className="main flex justify-center items-center">
       <main
         id="capture"
         className="relative"
@@ -121,54 +121,65 @@ export default function TypeA(props: {
 
         <div className="absolute w-3/4 mb-4 bottom-0 border left-1/2 -translate-x-1/2 border-amber-600 border-8">
           <div className="w-full flex h-64">
-            <div className="w-3/4 flex flex-col justify-between border border-amber-800 p-2 bg-orange-300">
+            <div
+              className="w-3/4 flex flex-col justify-between border border-amber-800 p-2 bg-orange-300"
+              style={{
+                background:
+                  "linear-gradient(0deg, rgba(239,170,98,1) 0%, rgba(250,196,114,1) 50%, rgba(239,170,98,1) 100%)",
+              }}
+            >
               {/* 대사 */}
               <p className="frame-text text-2xl text-orange-900">{line}</p>
               <span className="text-right material-symbols-outlined text-3xl text-orange-900">
                 arrow_drop_down
               </span>
             </div>
-            <div className="w-1/4 flex flex-col justify-center items-center border  border-amber-800 p-2 bg-orange-300">
+            <div
+              className="w-1/4 flex flex-col justify-center items-center border  border-amber-800 p-2"
+              style={{ background: "#d78238" }}
+            >
               {/* 캐릭터 이미지 */}
-              <div className="w-5/6 h-5/6 relative overflow-hidden">
+              <div
+                className="w-5/6 h-5/6 relative overflow-hidden border-4 border-amber-600"
+                style={{ background: "white" }}
+              >
                 <div
-                  className="w-full h-full absolute"
+                  className="frame-image w-full h-full absolute"
                   style={{
                     backgroundImage: `url(${characterImage})`,
                     backgroundPositionX: `${characterResize.leftright}px`,
                     backgroundPositionY: `${characterResize.updown}px`,
-                    backgroundRepeat: "no-repeat",
                     transform: `scale(${characterResize.zoom})`,
                   }}
                 ></div>
               </div>
               {/* 캐릭터 이름 */}
-              <p className="frame-text-2 frame-text text-2xl text-orange-900 h-1/6 flex justify-center items-center">
+              <p className="frame-text text-2xl pt-2 text-orange-900 h-1/6 flex justify-center items-center">
                 {character}
               </p>
             </div>
           </div>
         </div>
-        <div className="absolute top-0 w-full h-full -z-10">
-          {/* 캐릭터 이미지 */}
+        <div className="absolute top-0 w-full h-full -z-10 ">
+          {/* 배경 이미지 */}
           <div className="w-full h-full relative overflow-hidden">
             <div
-              className="w-full h-full absolute"
+              className="frame-image w-full h-full absolute"
               style={{
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundPositionX: `${bgResize.leftright}px`,
                 backgroundPositionY: `${bgResize.updown}px`,
-                backgroundRepeat: "no-repeat",
                 transform: `scale(${bgResize.zoom})`,
               }}
             ></div>
           </div>
         </div>
       </main>
-      <div className="detail w-full h-full border">
+      <div className="type-detail w-72 h-full p-3 border">
         <div className="character-image-upload">
+          <p className="title-text"> 캐릭터 업로드 </p>
           <label className="input-file-button" htmlFor="characterfile">
-            <span className="border"> 인물사진 등록 </span>
+            <p className="button-upload">캐릭터 업로드</p>
           </label>
           <input
             type="file"
@@ -177,7 +188,7 @@ export default function TypeA(props: {
             onChange={uploadCharacter}
             style={{ display: "none" }}
           />
-          <p>인물 크기 조정</p>
+          <p className="title-text">인물 크기 조정</p>
           <ul>
             <li>
               <p>확대,축소 (0~3)</p>
@@ -212,8 +223,9 @@ export default function TypeA(props: {
           </ul>
         </div>
         <div className="background-image-upload">
+          <p className="title-text"> 배경 등록 </p>
           <label className="input-file-button" htmlFor="backgroundfile">
-            <span className="border"> 배경 등록 </span>
+            <p className="button-upload">배경 업로드</p>
           </label>
           <input
             type="file"
@@ -222,7 +234,7 @@ export default function TypeA(props: {
             onChange={uploadBackground}
             style={{ display: "none" }}
           />
-          <p>배경 크기 조정</p>
+          <p className="title-text">배경 크기 조정</p>
           <ul>
             <li>
               <p>확대,축소 (0~3)</p>
@@ -257,14 +269,14 @@ export default function TypeA(props: {
           </ul>
         </div>
         <div>
-          <p>대사 : </p>
+          <p className="title-text">대사 : </p>
           <input
             type="text"
             className="border"
             value={line}
             onChange={changeLine}
           />
-          <p>캐릭터이름 : </p>
+          <p className="title-text">캐릭터이름 : </p>
           <input
             type="text"
             className="border"

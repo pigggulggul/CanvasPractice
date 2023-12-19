@@ -18,10 +18,35 @@ body {
 body section {
   line-height: 1.5;
 }
+
+img {
+  object-fit: contain;
+}
 .frame-text {
   font-family: "esamanru-Light";
   line-height: 1.8;
 }
-img {
-  object-fit: contain;
+.frame-image {
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.title-text {
+  font-weight: 700;
+  font-size: 18px;
+}
+.button-upload {
+  width: fit-content;
+  cursor: pointer;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(100 116 139 / var(--tw-border-opacity));
+  margin-top: 0.5rem /* 8px */;
+  margin-bottom: 0.5rem /* 8px */;
+  padding: 0.5rem /* 8px */;
+  border-radius: 0.25rem /* 4px */;
+  transition: all 0.3s ease;
+}
+.button-upload:hover {
+  color: white;
+  background-color: rgb(100 116 139 / var(--tw-border-opacity));
 }
