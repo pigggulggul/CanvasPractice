@@ -3,3 +3,7 @@ type ImageResize = {
   updown: number;
   leftright: number;
 };
+type OptionFlagType = {
+  detail: boolean;
+  template: boolean;
+};
