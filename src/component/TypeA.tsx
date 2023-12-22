@@ -150,6 +150,7 @@ export default function TypeA(props: {
                     backgroundPositionX: `${characterResize.leftright}px`,
                     backgroundPositionY: `${characterResize.updown}px`,
                     transform: `scale(${characterResize.zoom})`,
+                    backgroundPosition: "center",
                   }}
                 ></div>
               </div>
@@ -170,6 +171,7 @@ export default function TypeA(props: {
                 backgroundPositionX: `${bgResize.leftright}px`,
                 backgroundPositionY: `${bgResize.updown}px`,
                 transform: `scale(${bgResize.zoom})`,
+                backgroundPosition: "center",
               }}
             ></div>
           </div>
