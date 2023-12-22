@@ -6,4 +6,5 @@ type ImageResize = {
 type OptionFlagType = {
   detail: boolean;
   template: boolean;
+  other: boolean;
 };

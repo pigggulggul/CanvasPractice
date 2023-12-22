@@ -3,11 +3,11 @@ import CanvasItem from "../CanvasItem";
 
 export default function TypeA(props: {
   canvasRef: React.RefObject<HTMLCanvasElement>;
-  canvasWidth: number;
-  canvasHeight: number;
   template: string;
 }) {
-  const { canvasRef, canvasWidth, canvasHeight, template } = props;
+  const { canvasRef, template } = props;
+  const [canvasWidth, setCanvasWidth] = useState<number>(1280);
+  const [canvasHeight, setCanvasHeight] = useState<number>(1024);
   const [characterImage, setCharacterImage] = useState<string>();
   const [backgroundImage, setBackgroundImage] = useState<string>();
   const [currentTemplate, setcurrentTemplate] = useState<string>(template);
@@ -17,6 +17,7 @@ export default function TypeA(props: {
   const [optionFlag, setOptionFlag] = useState<OptionFlagType>({
     detail: true,
     template: false,
+    other: false,
   });
   const [characterResize, setCharacterResize] = useState<ImageResize>({
     zoom: 1.0,
@@ -108,86 +109,78 @@ export default function TypeA(props: {
   const eraserButton = () => {
     setEraserFlag(!eraserFlag);
   };
-  return (
-    <section className="main flex justify-center items-center">
-      <main
-        id="capture"
-        className="relative"
-        ref={canvasRef}
-        style={{ height: "1050px", width: "1400px" }}
-      >
-        <CanvasItem
-          canvasWidth={canvasWidth}
-          canvasHeight={canvasHeight}
-          onChangeType={currentTemplate}
-          eraser={eraserFlag}
-        ></CanvasItem>
 
-        <div className="absolute w-3/4 mb-4 bottom-0 border left-1/2 -translate-x-1/2 border-amber-600 border-8">
-          <div className="w-full flex h-64">
-            <div
-              className="w-3/4 flex flex-col justify-between border border-amber-800 p-2 bg-orange-300"
-              style={{
-                background:
-                  "linear-gradient(0deg, rgba(239,170,98,1) 0%, rgba(250,196,114,1) 50%, rgba(239,170,98,1) 100%)",
-              }}
-            >
-              {/* 대사 */}
-              <p className="frame-text text-2xl text-orange-900">{line}</p>
-              <span className="text-right material-symbols-outlined text-3xl text-orange-900">
-                arrow_drop_down
-              </span>
-            </div>
-            <div
-              className="w-1/4 flex flex-col justify-center items-center border  border-amber-800 p-2"
-              style={{ background: "#d78238" }}
-            >
-              {/* 캐릭터 이미지 */}
-              <div
-                className="w-5/6 h-5/6 relative overflow-hidden border-4 border-amber-600"
-                style={{ background: "white" }}
-              >
-                <div
-                  className="frame-image w-full h-full absolute"
-                  style={{
-                    backgroundImage: `url(${characterImage})`,
-                    backgroundPositionX: `${characterResize.leftright}px`,
-                    backgroundPositionY: `${characterResize.updown}px`,
-                    transform: `scale(${characterResize.zoom})`,
-                    backgroundPosition: "center",
-                  }}
-                ></div>
-              </div>
-              {/* 캐릭터 이름 */}
-              <p className="frame-text text-2xl pt-2 text-orange-900 h-1/6 flex justify-center items-center">
-                {character}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="absolute top-0 w-full h-full -z-10 ">
-          {/* 배경 이미지 */}
-          <div className="w-full h-full relative overflow-hidden">
-            <div
-              className="frame-image w-full h-full absolute"
-              style={{
-                backgroundImage: `url(${backgroundImage})`,
-                backgroundPositionX: `${bgResize.leftright}px`,
-                backgroundPositionY: `${bgResize.updown}px`,
-                transform: `scale(${bgResize.zoom})`,
-                backgroundPosition: "center",
-              }}
-            ></div>
-          </div>
-        </div>
-      </main>
-      <div className="type-detail w-72 h-full p-3 border">
-        <ul className="detail-title mb-3 flex justify-around">
-          <li className="border p-4">설정</li>
-          <li className="border p-4">테마</li>
-          <li className="border p-4">기타</li>
-        </ul>
+  const changeOption = (param: string) => {
+    if (param == "detail") {
+      setOptionFlag({ detail: true, template: false, other: false });
+    } else if (param == "template") {
+      setOptionFlag({ detail: false, template: true, other: false });
+    } else if (param == "other") {
+      setOptionFlag({ detail: false, template: false, other: true });
+    }
+  };
+  const changeResolution = (width: number, height: number) => {
+    setCanvasWidth(width);
+    setCanvasHeight(height);
+  };
+
+  // 옵션 설정
+  const selectOption = () => {
+    if (optionFlag.detail) {
+      return (
         <div className="detail-conetent">
+          {/* 해상도 */}
+          <div>
+            <p className="title-text">해상도 설정</p>
+            <button
+              className="button-stone"
+              onClick={() => {
+                changeResolution(1200, 800);
+              }}
+            >
+              1200 x 800
+            </button>
+            <button
+              className="button-stone"
+              onClick={() => {
+                changeResolution(1280, 720);
+              }}
+            >
+              1280 x 720
+            </button>
+            <button
+              className="button-stone"
+              onClick={() => {
+                changeResolution(1280, 960);
+              }}
+            >
+              1280 x 960
+            </button>
+            <button
+              className="button-stone"
+              onClick={() => {
+                changeResolution(1280, 1024);
+              }}
+            >
+              1280 x 1024
+            </button>
+            <button
+              className="button-stone"
+              onClick={() => {
+                changeResolution(1920, 1080);
+              }}
+            >
+              1920 x 1080
+            </button>
+            <button
+              className="button-stone"
+              onClick={() => {
+                changeResolution(1920, 1440);
+              }}
+            >
+              1920 x 1440
+            </button>
+          </div>
           <div className="character-image-upload">
             <p className="title-text"> 캐릭터 업로드 </p>
             <label className="input-file-button" htmlFor="characterfile">
@@ -298,6 +291,114 @@ export default function TypeA(props: {
           </div>
           <button onClick={eraserButton}>지우기</button>
         </div>
+      );
+    } else if (optionFlag.template) {
+      return <div>템플릿</div>;
+    }
+  };
+  return (
+    <section className="main flex justify-center items-center">
+      <main
+        id="capture"
+        className="relative"
+        ref={canvasRef}
+        style={{ height: `${canvasHeight}`, width: `${canvasWidth}` }}
+      >
+        <CanvasItem
+          canvasWidth={canvasWidth}
+          canvasHeight={canvasHeight}
+          onChangeType={currentTemplate}
+          eraser={eraserFlag}
+        ></CanvasItem>
+
+        <div className="absolute w-3/4 mb-4 bottom-0 left-1/2 -translate-x-1/2 border-amber-600 border-8">
+          <div className="w-full flex h-64">
+            <div
+              className="w-3/4 flex flex-col justify-between border border-amber-800 p-2 bg-orange-300"
+              style={{
+                background:
+                  "linear-gradient(0deg, rgba(239,170,98,1) 0%, rgba(250,196,114,1) 50%, rgba(239,170,98,1) 100%)",
+              }}
+            >
+              {/* 대사 */}
+              <p className="frame-text text-2xl text-orange-900">{line}</p>
+              <span className="text-right material-symbols-outlined text-3xl text-orange-900">
+                arrow_drop_down
+              </span>
+            </div>
+            <div
+              className="w-1/4 flex flex-col justify-center items-center border  border-amber-800 p-2"
+              style={{ background: "#d78238" }}
+            >
+              {/* 캐릭터 이미지 */}
+              <div
+                className="w-5/6 h-5/6 relative overflow-hidden border-4 border-amber-600"
+                style={{ background: "white" }}
+              >
+                <div
+                  className="frame-image w-full h-full absolute"
+                  style={{
+                    backgroundImage: `url(${characterImage})`,
+                    backgroundPositionX: `${characterResize.leftright}px`,
+                    backgroundPositionY: `${characterResize.updown}px`,
+                    transform: `scale(${characterResize.zoom})`,
+                    backgroundPosition: "center",
+                  }}
+                ></div>
+              </div>
+              {/* 캐릭터 이름 */}
+              <p className="frame-text text-2xl pt-2 text-orange-900 h-1/6 flex justify-center items-center">
+                {character}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="absolute top-0 w-full h-full -z-10 ">
+          {/* 배경 이미지 */}
+          <div className="w-full h-full relative overflow-hidden">
+            <div
+              className="frame-image w-full h-full absolute"
+              style={{
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundPositionX: `${bgResize.leftright}px`,
+                backgroundPositionY: `${bgResize.updown}px`,
+                transform: `scale(${bgResize.zoom})`,
+                backgroundPosition: "center",
+              }}
+            ></div>
+          </div>
+        </div>
+      </main>
+
+      {/* 설정 */}
+      <div className="type-detail w-72 h-full p-3 border">
+        <ul className="detail-title mb-3 flex justify-around">
+          <li
+            className="border p-4"
+            onClick={() => {
+              changeOption("detail");
+            }}
+          >
+            설정
+          </li>
+          <li
+            className="border p-4"
+            onClick={() => {
+              changeOption("template");
+            }}
+          >
+            테마
+          </li>
+          <li
+            className="border p-4"
+            onClick={() => {
+              changeOption("other");
+            }}
+          >
+            기타
+          </li>
+        </ul>
+        {selectOption()}
       </div>
     </section>
   );

@@ -35,9 +35,9 @@ function App() {
     );
   });
 
-  const clientRect = useClientWidthHeight(canvasRef);
-  let canvasWidth: number;
-  let canvasHeight: number;
+  // const clientRect = useClientWidthHeight(canvasRef);
+  // let canvasWidth: number;
+  // let canvasHeight: number;
   // if (clientRect.width > 1535) {
   //   canvasWidth = 1536;
   // } else if (clientRect.width > 1279) {
@@ -49,8 +49,8 @@ function App() {
   // } else {
   //   canvasWidth = 640;
   // }
-  canvasWidth = 1400;
-  canvasHeight = 1050;
+  // canvasWidth = 1400;
+  // canvasHeight = 1050;
   const onHtmlToPng = () => {
     const target = canvasRef.current;
     const onCapture = () => {
@@ -77,26 +77,12 @@ function App() {
     switch (currentTemplate) {
       case "typeA": {
         console.log("typeA");
-        return (
-          <TypeA
-            canvasRef={canvasRef}
-            canvasWidth={canvasWidth}
-            canvasHeight={canvasHeight}
-            template={currentTemplate}
-          ></TypeA>
-        );
+        return <TypeA canvasRef={canvasRef} template={currentTemplate}></TypeA>;
         break;
       }
       case "typeB": {
         console.log("typeB");
-        return (
-          <TypeA
-            canvasRef={canvasRef}
-            canvasWidth={canvasWidth}
-            canvasHeight={canvasHeight}
-            template={currentTemplate}
-          ></TypeA>
-        );
+        return <TypeA canvasRef={canvasRef} template={currentTemplate}></TypeA>;
       }
 
       default:
