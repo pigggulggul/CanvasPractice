@@ -14,6 +14,10 @@ export default function TypeA(props: {
   const [line, setLine] = useState<string>("대사를 입력해주세요");
   const [character, setCharacter] = useState<string>("이름");
   const [eraserFlag, setEraserFlag] = useState<boolean>(false);
+  const [optionFlag, setOptionFlag] = useState<OptionFlagType>({
+    detail: true,
+    template: false,
+  });
   const [characterResize, setCharacterResize] = useState<ImageResize>({
     zoom: 1.0,
     updown: 0,
@@ -178,115 +182,122 @@ export default function TypeA(props: {
         </div>
       </main>
       <div className="type-detail w-72 h-full p-3 border">
-        <div className="character-image-upload">
-          <p className="title-text"> 캐릭터 업로드 </p>
-          <label className="input-file-button" htmlFor="characterfile">
-            <p className="button-upload">캐릭터 업로드</p>
-          </label>
-          <input
-            type="file"
-            id="characterfile"
-            accept="image/*, .gif"
-            onChange={uploadCharacter}
-            style={{ display: "none" }}
-          />
-          <p className="title-text">인물 크기 조정</p>
-          <ul>
-            <li>
-              <p>확대,축소 (0~3)</p>
-              <input
-                type="number"
-                step={0.1}
-                className="border"
-                value={characterResize.zoom}
-                onChange={resizeZoomCharacter}
-              />
-            </li>
-            <li>
-              <p>상,하 (+,-)</p>
-              <input
-                type="number"
-                step={5}
-                className="border"
-                value={characterResize.updown}
-                onChange={resizeUpdownCharacter}
-              />
-            </li>
-            <li>
-              <p>좌,우 (+,-)</p>
-              <input
-                type="number"
-                step={5}
-                className="border"
-                value={characterResize.leftright}
-                onChange={resizeLeftrightCharacter}
-              />
-            </li>
-          </ul>
+        <ul className="detail-title mb-3 flex justify-around">
+          <li className="border p-4">설정</li>
+          <li className="border p-4">테마</li>
+          <li className="border p-4">기타</li>
+        </ul>
+        <div className="detail-conetent">
+          <div className="character-image-upload">
+            <p className="title-text"> 캐릭터 업로드 </p>
+            <label className="input-file-button" htmlFor="characterfile">
+              <p className="button-upload">캐릭터 업로드</p>
+            </label>
+            <input
+              type="file"
+              id="characterfile"
+              accept="image/*, .gif"
+              onChange={uploadCharacter}
+              style={{ display: "none" }}
+            />
+            <p className="title-text">인물 크기 조정</p>
+            <ul>
+              <li>
+                <p>확대,축소 (0~3)</p>
+                <input
+                  type="number"
+                  step={0.1}
+                  className="border"
+                  value={characterResize.zoom}
+                  onChange={resizeZoomCharacter}
+                />
+              </li>
+              <li>
+                <p>상,하 (+,-)</p>
+                <input
+                  type="number"
+                  step={5}
+                  className="border"
+                  value={characterResize.updown}
+                  onChange={resizeUpdownCharacter}
+                />
+              </li>
+              <li>
+                <p>좌,우 (+,-)</p>
+                <input
+                  type="number"
+                  step={5}
+                  className="border"
+                  value={characterResize.leftright}
+                  onChange={resizeLeftrightCharacter}
+                />
+              </li>
+            </ul>
+          </div>
+          <div className="background-image-upload">
+            <p className="title-text"> 배경 등록 </p>
+            <label className="input-file-button" htmlFor="backgroundfile">
+              <p className="button-upload">배경 업로드</p>
+            </label>
+            <input
+              type="file"
+              id="backgroundfile"
+              accept="image/*, .gif"
+              onChange={uploadBackground}
+              style={{ display: "none" }}
+            />
+            <p className="title-text">배경 크기 조정</p>
+            <ul>
+              <li>
+                <p>확대,축소 (0~3)</p>
+                <input
+                  type="number"
+                  step={0.1}
+                  className="border"
+                  value={bgResize.zoom}
+                  onChange={resizeZoomBg}
+                />
+              </li>
+              <li>
+                <p>상,하 (+,-)</p>
+                <input
+                  type="number"
+                  step={5}
+                  className="border"
+                  value={bgResize.updown}
+                  onChange={resizeUpdownBg}
+                />
+              </li>
+              <li>
+                <p>좌,우 (+,-)</p>
+                <input
+                  type="number"
+                  step={5}
+                  className="border"
+                  value={bgResize.leftright}
+                  onChange={resizeLeftrightBg}
+                />
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="title-text">대사 : </p>
+            <input
+              type="text"
+              className="border"
+              value={line}
+              onChange={changeLine}
+            />
+            <p className="title-text">캐릭터이름 : </p>
+            <input
+              type="text"
+              className="border"
+              value={character}
+              onChange={changeCharacter}
+            />
+          </div>
+          <button onClick={eraserButton}>지우기</button>
         </div>
-        <div className="background-image-upload">
-          <p className="title-text"> 배경 등록 </p>
-          <label className="input-file-button" htmlFor="backgroundfile">
-            <p className="button-upload">배경 업로드</p>
-          </label>
-          <input
-            type="file"
-            id="backgroundfile"
-            accept="image/*, .gif"
-            onChange={uploadBackground}
-            style={{ display: "none" }}
-          />
-          <p className="title-text">배경 크기 조정</p>
-          <ul>
-            <li>
-              <p>확대,축소 (0~3)</p>
-              <input
-                type="number"
-                step={0.1}
-                className="border"
-                value={bgResize.zoom}
-                onChange={resizeZoomBg}
-              />
-            </li>
-            <li>
-              <p>상,하 (+,-)</p>
-              <input
-                type="number"
-                step={5}
-                className="border"
-                value={bgResize.updown}
-                onChange={resizeUpdownBg}
-              />
-            </li>
-            <li>
-              <p>좌,우 (+,-)</p>
-              <input
-                type="number"
-                step={5}
-                className="border"
-                value={bgResize.leftright}
-                onChange={resizeLeftrightBg}
-              />
-            </li>
-          </ul>
-        </div>
-        <div>
-          <p className="title-text">대사 : </p>
-          <input
-            type="text"
-            className="border"
-            value={line}
-            onChange={changeLine}
-          />
-          <p className="title-text">캐릭터이름 : </p>
-          <input
-            type="text"
-            className="border"
-            value={character}
-            onChange={changeCharacter}
-          />
-        </div>
-        <button onClick={eraserButton}>지우기</button>
       </div>
     </section>
   );
