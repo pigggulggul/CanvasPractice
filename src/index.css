@@ -27,7 +27,9 @@ img {
   line-height: 1.8;
 }
 .frame-image {
+  background-size: contain;
   background-repeat: no-repeat;
+  background-position: center center;
 }
 .title-text {
   font-weight: 700;
@@ -61,4 +63,11 @@ img {
 .button-stone:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(214 211 209 / var(--tw-bg-opacity));
+}
+.resize-ul > li {
+  display: flex;
+}
+.resize-ul > li > input {
+  margin-left: 12px;
+  width: 64px;
 }

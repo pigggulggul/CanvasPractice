@@ -62,8 +62,8 @@ export default function CanvasItem(props: canvasType) {
       getCtx.beginPath();
       getCtx.moveTo(mouseX, mouseY);
     } else {
-      getCtx!.lineTo(mouseX, mouseY);
-      getCtx!.stroke();
+      getCtx?.lineTo(mouseX, mouseY);
+      getCtx?.stroke();
     }
   };
 
