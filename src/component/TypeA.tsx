@@ -23,18 +23,18 @@ export default function TypeA(props: {
   });
   const [mainCharacterResize, setMainCharacterResize] = useState<ImageResize>({
     zoom: 1.0,
-    updown: 0,
-    leftright: 0,
+    updown: 50,
+    leftright: 50,
   });
   const [characterResize, setCharacterResize] = useState<ImageResize>({
     zoom: 1.0,
-    updown: 0,
-    leftright: 0,
+    updown: 50,
+    leftright: 50,
   });
   const [bgResize, setBgResize] = useState<ImageResize>({
     zoom: 1.0,
-    updown: 0,
-    leftright: 0,
+    updown: 50,
+    leftright: 50,
   });
   const [theme, setTheme] = useState<string>("basic");
   const [textChoice, setTextChoice] = useState<string[]>([
@@ -239,7 +239,7 @@ export default function TypeA(props: {
             >
               1280 x 1024
             </button>
-            <button
+            {/* <button
               className="button-stone"
               onClick={() => {
                 changeResolution(1920, 1080);
@@ -254,7 +254,7 @@ export default function TypeA(props: {
               }}
             >
               1920 x 1440
-            </button>
+            </button> */}
           </div>
           <div className="maincharacter-image-upload">
             <p className="title-text"> 캐릭터 업로드 </p>
@@ -473,7 +473,7 @@ export default function TypeA(props: {
               changeTheme("visual-novel");
             }}
           >
-            미연시
+            게임
           </button>
         </div>
       );
@@ -552,7 +552,7 @@ export default function TypeA(props: {
               })}
             </div>
 
-            <div className="w-full flex h-64 relative border-amber-600 border-8 ">
+            <div className="w-full flex h-64 relative border-amber-600 border-8">
               <div
                 className="w-3/4 flex flex-col justify-between border border-amber-800 p-2 bg-orange-300"
                 style={{

@@ -27,9 +27,7 @@ img {
   line-height: 1.8;
 }
 .frame-image {
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
+  image-rendering: optimizeQuality;
 }
 .title-text {
   font-weight: 700;

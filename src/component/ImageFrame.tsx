@@ -7,14 +7,17 @@ export default function ImageFrame(props: {
   const { Image, Resize } = props;
 
   return (
-    <div
-      className="frame-image w-full h-full absolute"
-      style={{
-        backgroundImage: `url(${Image})`,
-        backgroundPositionX: `${Resize.leftright}px`,
-        backgroundPositionY: `${Resize.updown}px`,
-        transform: `scale(${Resize.zoom})`,
-      }}
-    ></div>
+    <div className="frame-image w-full h-full absolute">
+      <img
+        src={Image}
+        alt=""
+        style={{
+          position: "absolute",
+          left: `${Resize.leftright}%`,
+          top: `${Resize.updown}%`,
+          transform: `scale(${Resize.zoom}) translate(-50%, -50%)`,
+        }}
+      />
+    </div>
   );
 }
