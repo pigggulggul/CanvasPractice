@@ -588,7 +588,7 @@ export default function TypeA(props: {
               </div>
             </div>
           </div>
-          <div className="absolute top-0 w-full h-full -z-10 ">
+          <div className="absolute top-0 w-full h-full -z-20 ">
             {/* 캐릭터 이미지 */}
             <div className="w-full h-full relative overflow-hidden">
               <ImageFrame
@@ -643,64 +643,64 @@ export default function TypeA(props: {
             onChangeType={currentTemplate}
             eraser={eraserFlag}
           ></CanvasItem>
-
-          <div className="absolute w-3/4 mb-4 bottom-0 left-1/2 -translate-x-1/2 -z-10 flex flex-col items-end">
-            <div
-              className="w-60 border-2 border-amber-800 rounded my-2 text-amber-800 "
-              style={{
-                background:
-                  "linear-gradient(0deg, rgba(239,170,98,1) 0%, rgba(250,196,114,1) 50%, rgba(239,170,98,1) 100%)",
-              }}
-            >
+          <div className="absolute w-3/4 bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/4 -z-10 flex flex-col items-center">
+            <div className="w-5/6 my-4">
               {textChoice.map((item, index) => {
                 return (
                   <p
-                    className="frame-text h-12 text-lg flex flex-col items-start justify-center pl-2 my-1"
+                    className="frame-text h-12 text-white text-lg flex flex-col items-center justify-center my-16 py-6 rounded "
                     key={"choice " + index}
+                    style={{
+                      background: "rgba(65,65,136,0.8089285885252538)",
+                    }}
                   >
                     {textChoice[index]}
                   </p>
                 );
               })}
             </div>
+          </div>
 
-            <div className="w-full flex h-64 relative border-white border-2">
-              <div
-                className="w-3/4 flex flex-col justify-between border white bg-orange-300"
-                style={{
-                  background: "rgba(65,65,136,0.8089285885252538)",
-                }}
-              >
+          <div className="absolute w-11/12 mb-4 bottom-0 left-1/2 -translate-x-1/2 -z-10 flex flex-col items-start">
+            {/* 캐릭터 이름 */}
+            <div
+              className="w-56 border-2 border-white rounded mb-4 py-1 text-white"
+              style={{
+                background: "rgba(65,65,136,0.8089285885252538)",
+              }}
+            >
+              <p className="frame-text h-12 text-2xl flex flex-col items-center justify-center">
+                {character}
+              </p>
+            </div>
+
+            <div
+              className="w-full flex h-48 relative border-white border-2"
+              style={{
+                background: "rgba(65,65,136,0.8089285885252538)",
+              }}
+            >
+              <div className="w-1/6 flex flex-col justify-center items-center p-2">
+                {/* 액자 이미지 */}
+                <div className="w-5/6 h-5/6 relative overflow-hidden border-4">
+                  <ImageFrame
+                    Image={characterSubImage}
+                    Resize={characterResize}
+                  ></ImageFrame>
+                </div>
+              </div>
+              <div className="w-3/4 flex flex-col justify-between white">
                 {/* 대사 */}
-                <p className="frame-text text-2xl text-white px-3 py-1">
+                <p className="frame-text text-xl text-white px-3 py-2">
                   {line}
                 </p>
                 <span className="text-right material-symbols-outlined text-3xl text-slate-800">
                   arrow_drop_down
                 </span>
               </div>
-              <div
-                className="w-1/4 flex flex-col justify-center items-center border  border-amber-800 p-2"
-                style={{ background: "#d78238" }}
-              >
-                {/* 액자 이미지 */}
-                <div
-                  className="w-5/6 h-5/6 relative overflow-hidden border-4 border-amber-600"
-                  style={{ background: "white" }}
-                >
-                  <ImageFrame
-                    Image={characterSubImage}
-                    Resize={characterResize}
-                  ></ImageFrame>
-                </div>
-                {/* 캐릭터 이름 */}
-                <p className="frame-text text-2xl pt-2 text-orange-900 h-1/6 flex justify-center items-center">
-                  {character}
-                </p>
-              </div>
             </div>
           </div>
-          <div className="absolute top-0 w-full h-full -z-10 ">
+          <div className="absolute top-0 w-full h-full -z-20 ">
             {/* 캐릭터 이미지 */}
             <div className="w-full h-full relative overflow-hidden">
               <ImageFrame
@@ -721,19 +721,17 @@ export default function TypeA(props: {
 
           <div className="absolute top-4 right-4 flex flex-col justify-center items-end">
             <p
-              className="frame-text w-36 text-xl text-center text-orange-900 border-4 border-amber-700 rounded"
+              className="frame-text w-36 text-xl text-center text-white border-2 my-1 border-white rounded"
               style={{
-                background:
-                  "linear-gradient(0deg, rgba(239,170,98,1) 0%, rgba(250,196,114,1) 50%, rgba(239,170,98,1) 100%)",
+                background: "rgba(65,65,136,0.8089285885252538)",
               }}
             >
               Sep. 25. 목
             </p>
             <p
-              className="frame-text w-36 text-xl text-center text-orange-900 border-4 border-amber-700 rounded"
+              className="frame-text w-36 text-xl text-center text-white border-2 my-1 border-white rounded"
               style={{
-                background:
-                  "linear-gradient(0deg, rgba(239,170,98,1) 0%, rgba(250,196,114,1) 50%, rgba(239,170,98,1) 100%)",
+                background: "rgba(65,65,136,0.8089285885252538)",
               }}
             >
               6:50 오전
