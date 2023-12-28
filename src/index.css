@@ -15,6 +15,18 @@
 body {
   line-height: 0;
 }
+*::-webkit-scrollbar {
+  width: 6px;
+}
+*::-webkit-scrollbar-track {
+  background-color: white;
+  border-radius: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #b2b2b2;
+  border-radius: 10px;
+}
+
 body section {
   line-height: 1.5;
 }
@@ -62,10 +74,17 @@ img {
   --tw-bg-opacity: 1;
   background-color: rgb(214 211 209 / var(--tw-bg-opacity));
 }
-.resize-ul > li {
-  display: flex;
+.detail-conetent {
+  height: 700px;
+  overflow-y: scroll;
 }
-.resize-ul > li > input {
+.resize-ul {
+  margin: 10px 0;
+}
+.resize-ul > li {
+  /* display: flex; */
+}
+.resize-ul > li > input:nth-child(3) {
   margin-left: 12px;
-  width: 64px;
+  width: 50px;
 }

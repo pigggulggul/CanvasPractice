@@ -14,7 +14,7 @@ export default function useCanvas(
       // const devicePixelRatio = window.devicePixelRatio ?? 1;
       let devicePixelRatio = 1;
       if (canvas && ctx) {
-        if (canvasWidth > 1280) {
+        if (canvasWidth > 1300) {
           devicePixelRatio = 2;
           canvasWidth /= 2;
           canvasHeight /= 2;

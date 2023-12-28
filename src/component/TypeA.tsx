@@ -1,6 +1,8 @@
 import { BaseSyntheticEvent, useState } from "react";
 import CanvasItem from "../CanvasItem";
 import ImageFrame from "./ImageFrame";
+import { uploadFile } from "../function/uploadFile";
+import { resizeImage } from "../function/resizeImage";
 
 export default function TypeA(props: {
   canvasRef: React.RefObject<HTMLCanvasElement>;
@@ -42,118 +44,8 @@ export default function TypeA(props: {
     "선택지2",
   ]);
 
-  const uploadMainCharacter = (event: any) => {
-    setCharacterMainImage("");
-    if (event.target.files.length > 1) {
-      alert("사진은 최대 1개 까지 첨부가능합니다.");
-    } else {
-      for (const file of event.target.files) {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          setCharacterMainImage(e.target.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-  };
-
-  const uploadSubCharacter = (event: any) => {
-    setCharacterSubImage("");
-    if (event.target.files.length > 1) {
-      alert("사진은 최대 1개 까지 첨부가능합니다.");
-    } else {
-      for (const file of event.target.files) {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          setCharacterSubImage(e.target.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-  };
-  const uploadBackground = (event: any) => {
-    setBackgroundImage("");
-    if (event.target.files.length > 1) {
-      alert("사진은 최대 1개 까지 첨부가능합니다.");
-    } else {
-      for (const file of event.target.files) {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          setBackgroundImage(e.target.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-  };
   const changeCharacter = (event: BaseSyntheticEvent) => {
     setCharacter(event.target.value);
-  };
-  const resizeZoom = (
-    event: BaseSyntheticEvent,
-    paramType: string,
-    paramValue: string
-  ) => {
-    if (paramType == "mainCharacter") {
-      if (paramValue == "zoom") {
-        const num: number = parseFloat(event.target.value);
-        setMainCharacterResize((prev) => ({
-          ...prev,
-          zoom: num,
-        }));
-      } else if (paramValue == "updown") {
-        const num: number = parseInt(event.target.value);
-        setMainCharacterResize((prev) => ({
-          ...prev,
-          updown: num,
-        }));
-      } else if (paramValue == "leftright") {
-        const num: number = parseInt(event.target.value);
-        setMainCharacterResize((prev) => ({
-          ...prev,
-          leftright: num,
-        }));
-      }
-    } else if (paramType == "subCharacter") {
-      if (paramValue == "zoom") {
-        const num: number = parseFloat(event.target.value);
-        setCharacterResize((prev) => ({
-          ...prev,
-          zoom: num,
-        }));
-      } else if (paramValue == "updown") {
-        const num: number = parseInt(event.target.value);
-        setCharacterResize((prev) => ({
-          ...prev,
-          updown: num,
-        }));
-      } else if (paramValue == "leftright") {
-        const num: number = parseInt(event.target.value);
-        setCharacterResize((prev) => ({
-          ...prev,
-          leftright: num,
-        }));
-      }
-    } else if (paramType == "background") {
-      if (paramValue == "zoom") {
-        const num: number = parseFloat(event.target.value);
-        setBgResize((prev) => ({
-          ...prev,
-          zoom: num,
-        }));
-      } else if (paramValue == "updown") {
-        const num: number = parseInt(event.target.value);
-        setBgResize((prev) => ({
-          ...prev,
-          updown: num,
-        }));
-      } else if (paramValue == "leftright") {
-        const num: number = parseInt(event.target.value);
-        setBgResize((prev) => ({
-          ...prev,
-          leftright: num,
-        }));
-      }
-    }
   };
 
   const changeLine = (event: BaseSyntheticEvent) => {
@@ -256,7 +148,7 @@ export default function TypeA(props: {
               1920 x 1440
             </button> */}
           </div>
-          <div className="maincharacter-image-upload">
+          <div className="maincharacter-image-upload my-6">
             <p className="title-text"> 캐릭터 업로드 </p>
             <label className="input-file-button" htmlFor="maincharacterfile">
               <p className="button-upload">캐릭터 업로드</p>
@@ -265,50 +157,85 @@ export default function TypeA(props: {
               type="file"
               id="maincharacterfile"
               accept="image/*, .gif"
-              onChange={uploadMainCharacter}
+              onChange={(event) => {
+                uploadFile(event, setCharacterMainImage);
+              }}
               style={{ display: "none" }}
             />
-            <p className="title-text">인물 크기 조정</p>
+            <p className="title-text">캐릭터 크기 조정</p>
             <ul className="resize-ul">
               <li>
                 <p>확대,축소</p>
+                <input
+                  type="range"
+                  min={0.0}
+                  max={2.0}
+                  step={0.1}
+                  className="border"
+                  value={mainCharacterResize.zoom}
+                  onChange={(e) => {
+                    resizeImage(e, setMainCharacterResize, "zoom");
+                  }}
+                />
                 <input
                   type="number"
                   step={0.1}
                   className="border"
                   value={mainCharacterResize.zoom}
                   onChange={(e) => {
-                    resizeZoom(e, "mainCharacter", "zoom");
+                    resizeImage(e, setMainCharacterResize, "zoom");
                   }}
                 />
               </li>
               <li>
                 <p>상,하 (0~100%)</p>
                 <input
-                  type="number"
-                  step={5}
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={1}
                   className="border"
                   value={mainCharacterResize.updown}
                   onChange={(e) => {
-                    resizeZoom(e, "mainCharacter", "updown");
+                    resizeImage(e, setMainCharacterResize, "updown");
+                  }}
+                />
+                <input
+                  type="number"
+                  step={1}
+                  className="border"
+                  value={mainCharacterResize.updown}
+                  onChange={(e) => {
+                    resizeImage(e, setMainCharacterResize, "updown");
                   }}
                 />
               </li>
               <li>
                 <p>좌,우 (+,-)</p>
                 <input
-                  type="number"
-                  step={5}
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={1}
                   className="border"
                   value={mainCharacterResize.leftright}
                   onChange={(e) => {
-                    resizeZoom(e, "mainCharacter", "leftright");
+                    resizeImage(e, setMainCharacterResize, "leftright");
+                  }}
+                />
+                <input
+                  type="number"
+                  step={1}
+                  className="border"
+                  value={mainCharacterResize.leftright}
+                  onChange={(e) => {
+                    resizeImage(e, setMainCharacterResize, "leftright");
                   }}
                 />
               </li>
             </ul>
           </div>
-          <div className="subcharacter-image-upload">
+          <div className="subcharacter-image-upload my-6">
             <p className="title-text"> 액자 업로드 </p>
             <label className="input-file-button" htmlFor="characterfile">
               <p className="button-upload">액자 업로드</p>
@@ -317,7 +244,9 @@ export default function TypeA(props: {
               type="file"
               id="characterfile"
               accept="image/*, .gif"
-              onChange={uploadSubCharacter}
+              onChange={(event) => {
+                uploadFile(event, setCharacterSubImage);
+              }}
               style={{ display: "none" }}
             />
             <p className="title-text">인물 크기 조정</p>
@@ -325,42 +254,75 @@ export default function TypeA(props: {
               <li>
                 <p>확대,축소</p>
                 <input
+                  type="range"
+                  min={0.0}
+                  max={2.0}
+                  step={0.1}
+                  className="border"
+                  value={characterResize.zoom}
+                  onChange={(e) => {
+                    resizeImage(e, setCharacterResize, "zoom");
+                  }}
+                />
+                <input
                   type="number"
                   step={0.1}
                   className="border"
                   value={characterResize.zoom}
                   onChange={(e) => {
-                    resizeZoom(e, "subCharacter", "zoom");
+                    resizeImage(e, setCharacterResize, "zoom");
                   }}
                 />
               </li>
               <li>
                 <p>상,하 (0~100%)</p>
                 <input
-                  type="number"
-                  step={5}
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={1}
                   className="border"
                   value={characterResize.updown}
                   onChange={(e) => {
-                    resizeZoom(e, "subCharacter", "updown");
+                    resizeImage(e, setCharacterResize, "updown");
+                  }}
+                />
+                <input
+                  type="number"
+                  step={1}
+                  className="border"
+                  value={characterResize.updown}
+                  onChange={(e) => {
+                    resizeImage(e, setCharacterResize, "updown");
                   }}
                 />
               </li>
               <li>
                 <p>좌,우 (+,-)</p>
                 <input
-                  type="number"
-                  step={5}
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={1}
                   className="border"
                   value={characterResize.leftright}
                   onChange={(e) => {
-                    resizeZoom(e, "subCharacter", "leftright");
+                    resizeImage(e, setCharacterResize, "leftright");
+                  }}
+                />
+                <input
+                  type="number"
+                  step={1}
+                  className="border"
+                  value={characterResize.leftright}
+                  onChange={(e) => {
+                    resizeImage(e, setCharacterResize, "leftright");
                   }}
                 />
               </li>
             </ul>
           </div>
-          <div className="background-image-upload">
+          <div className="background-image-upload my-6">
             <p className="title-text"> 배경 등록 </p>
             <label className="input-file-button" htmlFor="backgroundfile">
               <p className="button-upload">배경 업로드</p>
@@ -369,7 +331,9 @@ export default function TypeA(props: {
               type="file"
               id="backgroundfile"
               accept="image/*, .gif"
-              onChange={uploadBackground}
+              onChange={(event) => {
+                uploadFile(event, setBackgroundImage);
+              }}
               style={{ display: "none" }}
             />
             <p className="title-text">배경 크기 조정</p>
@@ -377,56 +341,93 @@ export default function TypeA(props: {
               <li>
                 <p>확대,축소</p>
                 <input
+                  type="range"
+                  min={0.0}
+                  max={2.0}
+                  step={0.1}
+                  className="border"
+                  value={bgResize.zoom}
+                  onChange={(e) => {
+                    resizeImage(e, setBgResize, "zoom");
+                  }}
+                />
+                <input
                   type="number"
                   step={0.1}
                   className="border"
                   value={bgResize.zoom}
                   onChange={(e) => {
-                    resizeZoom(e, "background", "zoom");
+                    resizeImage(e, setBgResize, "zoom");
                   }}
                 />
               </li>
               <li>
                 <p>상,하 (0~100%)</p>
                 <input
-                  type="number"
-                  step={5}
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={1}
                   className="border"
                   value={bgResize.updown}
                   onChange={(e) => {
-                    resizeZoom(e, "background", "updown");
+                    resizeImage(e, setBgResize, "updown");
+                  }}
+                />
+                <input
+                  type="number"
+                  step={1}
+                  className="border"
+                  value={bgResize.updown}
+                  onChange={(e) => {
+                    resizeImage(e, setBgResize, "updown");
                   }}
                 />
               </li>
               <li>
                 <p>좌,우 (+,-)</p>
                 <input
-                  type="number"
-                  step={5}
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={1}
                   className="border"
                   value={bgResize.leftright}
                   onChange={(e) => {
-                    resizeZoom(e, "background", "leftright");
+                    resizeImage(e, setBgResize, "leftright");
+                  }}
+                />
+                <input
+                  type="number"
+                  step={1}
+                  className="border"
+                  value={bgResize.leftright}
+                  onChange={(e) => {
+                    resizeImage(e, setBgResize, "leftright");
                   }}
                 />
               </li>
             </ul>
           </div>
           <div>
-            <p className="title-text">대사 : </p>
-            <input
-              type="text"
-              className="border"
-              value={line}
-              onChange={changeLine}
-            />
-            <p className="title-text">캐릭터이름 : </p>
-            <input
-              type="text"
-              className="border"
-              value={character}
-              onChange={changeCharacter}
-            />
+            <div className="my-4">
+              <p className="title-text">대사 : </p>
+              <input
+                type="text"
+                className="border"
+                value={line}
+                onChange={changeLine}
+              />
+            </div>
+            <div className="my-4">
+              <p className="title-text">캐릭터이름 : </p>
+              <input
+                type="text"
+                className="border"
+                value={character}
+                onChange={changeCharacter}
+              />
+            </div>
           </div>
           <div>
             <p className="title-text">선택지</p>
@@ -487,7 +488,7 @@ export default function TypeA(props: {
       <div className="type-detail w-72 h-full p-3 border">
         <ul className="detail-title mb-3 flex justify-around">
           <li
-            className="border p-4"
+            className="border p-4 cursor-pointer"
             onClick={() => {
               changeOption("detail");
             }}
@@ -495,7 +496,7 @@ export default function TypeA(props: {
             설정
           </li>
           <li
-            className="border p-4"
+            className="border p-4 cursor-pointer"
             onClick={() => {
               changeOption("template");
             }}
@@ -503,7 +504,7 @@ export default function TypeA(props: {
             테마
           </li>
           <li
-            className="border p-4"
+            className="border p-4 cursor-pointer"
             onClick={() => {
               changeOption("other");
             }}
@@ -587,6 +588,15 @@ export default function TypeA(props: {
               </div>
             </div>
           </div>
+          <div className="absolute top-0 w-full h-full -z-10 ">
+            {/* 캐릭터 이미지 */}
+            <div className="w-full h-full relative overflow-hidden">
+              <ImageFrame
+                Image={characterMainImage}
+                Resize={mainCharacterResize}
+              ></ImageFrame>
+            </div>
+          </div>
           <div className="absolute top-0 w-full h-full -z-30 ">
             {/* 배경 이미지 */}
             <div className="w-full h-full relative overflow-hidden">
@@ -596,15 +606,7 @@ export default function TypeA(props: {
               ></ImageFrame>
             </div>
           </div>
-          <div className="absolute top-0 w-full h-full -z-20 ">
-            {/* 캐릭터 이미지 */}
-            <div className="w-full h-full relative overflow-hidden">
-              <ImageFrame
-                Image={characterMainImage}
-                Resize={mainCharacterResize}
-              ></ImageFrame>
-            </div>
-          </div>
+
           <div className="absolute top-4 right-4 flex flex-col justify-center items-end">
             <p
               className="frame-text w-36 text-xl text-center text-orange-900 border-4 border-amber-700 rounded"
@@ -628,7 +630,117 @@ export default function TypeA(props: {
         </main>
       );
     } else if (theme == "visual-novel") {
-      return <div>헤헤</div>;
+      return (
+        <main
+          id="capture"
+          className="relative bg-slate-100 z-0"
+          ref={canvasRef}
+          style={{ height: `${canvasHeight}`, width: `${canvasWidth}` }}
+        >
+          <CanvasItem
+            canvasWidth={canvasWidth}
+            canvasHeight={canvasHeight}
+            onChangeType={currentTemplate}
+            eraser={eraserFlag}
+          ></CanvasItem>
+
+          <div className="absolute w-3/4 mb-4 bottom-0 left-1/2 -translate-x-1/2 -z-10 flex flex-col items-end">
+            <div
+              className="w-60 border-2 border-amber-800 rounded my-2 text-amber-800 "
+              style={{
+                background:
+                  "linear-gradient(0deg, rgba(239,170,98,1) 0%, rgba(250,196,114,1) 50%, rgba(239,170,98,1) 100%)",
+              }}
+            >
+              {textChoice.map((item, index) => {
+                return (
+                  <p
+                    className="frame-text h-12 text-lg flex flex-col items-start justify-center pl-2 my-1"
+                    key={"choice " + index}
+                  >
+                    {textChoice[index]}
+                  </p>
+                );
+              })}
+            </div>
+
+            <div className="w-full flex h-64 relative border-white border-2">
+              <div
+                className="w-3/4 flex flex-col justify-between border white bg-orange-300"
+                style={{
+                  background: "rgba(65,65,136,0.8089285885252538)",
+                }}
+              >
+                {/* 대사 */}
+                <p className="frame-text text-2xl text-white px-3 py-1">
+                  {line}
+                </p>
+                <span className="text-right material-symbols-outlined text-3xl text-slate-800">
+                  arrow_drop_down
+                </span>
+              </div>
+              <div
+                className="w-1/4 flex flex-col justify-center items-center border  border-amber-800 p-2"
+                style={{ background: "#d78238" }}
+              >
+                {/* 액자 이미지 */}
+                <div
+                  className="w-5/6 h-5/6 relative overflow-hidden border-4 border-amber-600"
+                  style={{ background: "white" }}
+                >
+                  <ImageFrame
+                    Image={characterSubImage}
+                    Resize={characterResize}
+                  ></ImageFrame>
+                </div>
+                {/* 캐릭터 이름 */}
+                <p className="frame-text text-2xl pt-2 text-orange-900 h-1/6 flex justify-center items-center">
+                  {character}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="absolute top-0 w-full h-full -z-10 ">
+            {/* 캐릭터 이미지 */}
+            <div className="w-full h-full relative overflow-hidden">
+              <ImageFrame
+                Image={characterMainImage}
+                Resize={mainCharacterResize}
+              ></ImageFrame>
+            </div>
+          </div>
+          <div className="absolute top-0 w-full h-full -z-30 ">
+            {/* 배경 이미지 */}
+            <div className="w-full h-full relative overflow-hidden">
+              <ImageFrame
+                Image={backgroundImage}
+                Resize={bgResize}
+              ></ImageFrame>
+            </div>
+          </div>
+
+          <div className="absolute top-4 right-4 flex flex-col justify-center items-end">
+            <p
+              className="frame-text w-36 text-xl text-center text-orange-900 border-4 border-amber-700 rounded"
+              style={{
+                background:
+                  "linear-gradient(0deg, rgba(239,170,98,1) 0%, rgba(250,196,114,1) 50%, rgba(239,170,98,1) 100%)",
+              }}
+            >
+              Sep. 25. 목
+            </p>
+            <p
+              className="frame-text w-36 text-xl text-center text-orange-900 border-4 border-amber-700 rounded"
+              style={{
+                background:
+                  "linear-gradient(0deg, rgba(239,170,98,1) 0%, rgba(250,196,114,1) 50%, rgba(239,170,98,1) 100%)",
+              }}
+            >
+              6:50 오전
+            </p>
+          </div>
+        </main>
+      );
     }
   }
 }

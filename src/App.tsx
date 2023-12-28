@@ -64,7 +64,7 @@ function App() {
     };
 
     const onSaveAs = (uri: string, filename: string) => {
-      let link = document.createElement("a");
+      const link = document.createElement("a");
       document.body.appendChild(link);
       link.href = uri;
       link.download = filename;
@@ -78,7 +78,6 @@ function App() {
       case "typeA": {
         console.log("typeA");
         return <TypeA canvasRef={canvasRef} template={currentTemplate}></TypeA>;
-        break;
       }
       case "typeB": {
         console.log("typeB");
@@ -87,7 +86,6 @@ function App() {
 
       default:
         return <div></div>;
-        break;
     }
   }
 
