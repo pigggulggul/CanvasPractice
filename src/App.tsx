@@ -4,6 +4,7 @@ import CanvasItem from "./CanvasItem";
 import useClientWidthHeight from "./script/useClientWidthHeight";
 import html2canvas from "html2canvas";
 import TypeA from "./component/TypeA";
+import AWS from "aws-sdk";
 
 type templateType = {
   thumb: string;
@@ -15,6 +16,7 @@ function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [previewImages, setPreviewImages] = useState<string>();
   const [currentTemplate, setcurrentTemplate] = useState<string>("");
+  const [fileList, setFileList] = useState<string[]>([]);
   const template: templateType[] = [
     { thumb: "typeA", name: "타입A", thumbType: "jpg" },
     { thumb: "typeB", name: "타입B", thumbType: "jpg" },
@@ -34,6 +36,34 @@ function App() {
       </li>
     );
   });
+
+  useEffect(() => {
+    AWS.config.update({
+      accessKeyId: import.meta.env.VITE_S3_ACCESS_KEY,
+      secretAccessKey: import.meta.env.VITE_S3_SECRET_KEY,
+      region: "ap-northeast-2",
+    });
+    const s3 = new AWS.S3();
+    const bucketName = "ai-image-canvas";
+    const prefix = "background/";
+    s3.listObjectsV2({ Bucket: bucketName, Prefix: prefix }, (err, data) => {
+      if (err) {
+        console.log("에러");
+        console.log(err);
+      } else {
+        if (data.Contents) {
+          let list: string[] = [];
+          data.Contents.map((file) => {
+            if (file.Key) {
+              list.push(file.Key);
+            }
+          });
+          console.log(list);
+          setFileList(list);
+        }
+      }
+    });
+  }, []);
 
   // const clientRect = useClientWidthHeight(canvasRef);
   // let canvasWidth: number;
