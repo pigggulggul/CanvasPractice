@@ -644,11 +644,11 @@ export default function TypeA(props: {
             eraser={eraserFlag}
           ></CanvasItem>
           <div className="absolute w-3/4 bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/4 -z-10 flex flex-col items-center">
-            <div className="w-5/6 my-4">
+            <div className="w-5/6 my-4 flex flex-col items-center">
               {textChoice.map((item, index) => {
                 return (
                   <p
-                    className="frame-text h-12 text-white text-lg flex flex-col items-center justify-center my-16 py-6 rounded "
+                    className="frame-text h-12 w-4/6 text-white text-lg flex flex-col items-center justify-center my-8 py-6 rounded "
                     key={"choice " + index}
                     style={{
                       background: "rgba(65,65,136,0.8089285885252538)",
@@ -691,7 +691,7 @@ export default function TypeA(props: {
               </div>
               <div className="w-3/4 flex flex-col justify-between white">
                 {/* 대사 */}
-                <p className="frame-text text-xl text-white px-3 py-2">
+                <p className="frame-text text-2xl text-white px-3 py-2">
                   {line}
                 </p>
                 <span className="text-right material-symbols-outlined text-3xl text-slate-800">
