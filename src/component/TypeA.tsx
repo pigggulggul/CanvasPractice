@@ -522,7 +522,7 @@ export default function TypeA(props: {
       return (
         <main
           id="capture"
-          className="relative bg-slate-100 z-0"
+          className="relative z-0"
           ref={canvasRef}
           style={{ height: `${canvasHeight}`, width: `${canvasWidth}` }}
         >

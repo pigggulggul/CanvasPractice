@@ -88,9 +88,11 @@ function App() {
       if (!target) {
         return alert("결과 저장에 실패했습니다");
       }
-      html2canvas(target, { scale: 2 }).then((canvas) => {
-        onSaveAs(canvas.toDataURL("image/png"), "image-download.png");
-      });
+      html2canvas(target, { scale: 2, backgroundColor: null }).then(
+        (canvas) => {
+          onSaveAs(canvas.toDataURL("image/png"), "image-download.png");
+        }
+      );
     };
 
     const onSaveAs = (uri: string, filename: string) => {
